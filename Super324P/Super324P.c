@@ -183,7 +183,12 @@ ISR(INT1_vect)
 void init_interrupt()
 {
 	//configure registers
-sei();
+	sei();
+}
+
+void disable_interrupt()
+{
+	cli();
 }
 
 
