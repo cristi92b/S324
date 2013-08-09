@@ -46,7 +46,17 @@ Configure Connections
 #define RCK PB2 //latch clock (latch)
 #define BLANK PB3 //active-low, output enable(blank)
 
+#define BCD_DDR DDRC
+#define BCD_PORT PORTC
+#define INTERRUPT_DDR DDRD
+#define INTERRUPT_PORT PORTD
 
+#define RAND_LED PC4
+
+//To be implemented in later release:
+//automated increase/decrease mode after x seconds
+//#define RAND_LEVEL2 PD0
+//#define ASC_DESC PD1
 
 typedef struct cube{
 	uint8_t p[8];
@@ -172,13 +182,13 @@ Interrupts configuration
 
 ****************************/
 
-#define RAND_LED PC4
+
 
 ISR(INT0_vect)
 {
 	if(random_flag==0)
 	{
-		if(led_mode>=9)
+		if(led_mode>=last_mode)
 		{
 			led_mode=0;
 		}
@@ -192,8 +202,20 @@ ISR(INT0_vect)
 
 ISR(INT1_vect)
 {
-	
-	//code
+	if(random_flag==0)
+	{
+	//enable
+	setHigh(BCD_PORT,RAND_LED);
+	random_flag=1;
+	random_operation();
+	{
+	else
+	{
+	//disable
+	setLow(BCD_PORT,RAND_LED);
+	random_flag=0;
+	non_random_operation(led_mode);
+	}
 }
 
 void init_interrupt()
@@ -209,6 +231,7 @@ void disable_interrupt()
 
 void non_random_operation(uint8_t x)
 {
+	update_BCD(x);
 	switch(x)
 	{
 		case 0 : mode_00(); break;
@@ -224,7 +247,23 @@ void random_operation()
 	//to be continued
 }
 
+/**************************
 
+BCD Control
+
+***************************/
+
+void update_BCD(uint8_t x)
+{
+	x&=0x0f;
+	if(check(BCD_PORT,RAND_LED)) setHigh(x,RAND_LED);
+	BCD_PORT=x;
+}
+
+void init_BCD()
+{
+	BCD_DDR=0xff;
+}
 
 /*************************
 
@@ -262,6 +301,7 @@ void mode_00()
 int main()
 {	
 	init_74HC595();
+	init_BCD();
 	init_interrupt();
 	non_random_operation(led_mode);
 	return 0;
