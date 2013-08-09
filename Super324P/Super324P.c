@@ -56,6 +56,14 @@ typedef struct reg_data{
 }REG_DATA;
 
 
+/*************************
+
+Global variables
+
+**************************/
+
+uint8_t random_flag=0;
+
 /**************************
 
 Register operations
@@ -162,7 +170,10 @@ CUBE data type: {line,line,line,line,line,line,line,level}
 
 *******************************/
 
-
+void interr_tr()
+{
+	
+}
 
 
 void mode_00()
