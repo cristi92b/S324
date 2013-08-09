@@ -53,6 +53,8 @@ Configure Connections
 
 #define RAND_LED PC4
 
+#define BOARD_TEST_PIN PC7
+
 //To be implemented in later release:
 //automated increase/decrease mode after x seconds
 //#define RAND_LEVEL2 PD0
@@ -220,7 +222,8 @@ ISR(INT1_vect)
 
 void init_interrupt()
 {
-	//configure registers
+	EICRA|=(1<<ISC01)|(1<<ISC11); //trigger on falling edge for INT0 and INT1
+	EIMSK|=(1<<INT0)|(1<<INT1);   //enable interrupt pins
 	sei();
 }
 
@@ -298,11 +301,41 @@ void mode_00()
 		}		
 }
 
+uint8_t check_board()
+{
+	if(check(PINC,BOARD_TEST_PIN)) return 1;
+	else return 0;
+}
+
+void check_ok_signal()
+{
+	setHigh(BCD_PORT,RAND_LED);
+	_delay_ms(100);
+	setLow(BCD_PORT,RAND_LED);
+	_delay_ms(100);
+	setHigh(BCD_PORT,RAND_LED);
+	_delay_ms(100);
+	setLow(BCD_PORT,RAND_LED);
+	_delay_ms(100);
+	setHigh(BCD_PORT,RAND_LED);
+	_delay_ms(100);
+	setLow(BCD_PORT,RAND_LED);
+}
+
 int main()
 {	
 	init_74HC595();
-	init_BCD();
-	init_interrupt();
-	non_random_operation(led_mode);
+	if(check_board())
+	{
+		
+		init_BCD();
+		check_ok_signal();
+		init_interrupt();
+		non_random_operation(led_mode);
+	}
+	else
+	{
+		mode_00();
+	}		
 	return 0;
 }
