@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Super324P", "Super324P\Super324P.cproj", "{72F589D5-62C0-48A0-B78E-545778D4C519}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72F589D5-62C0-48A0-B78E-545778D4C519}.Debug|AVR.ActiveCfg = Debug|AVR
+		{72F589D5-62C0-48A0-B78E-545778D4C519}.Debug|AVR.Build.0 = Debug|AVR
+		{72F589D5-62C0-48A0-B78E-545778D4C519}.Release|AVR.ActiveCfg = Release|AVR
+		{72F589D5-62C0-48A0-B78E-545778D4C519}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
