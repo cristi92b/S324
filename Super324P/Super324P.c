@@ -63,7 +63,10 @@ Global variables
 
 **************************/
 
+#define last_mode 9
+
 uint8_t random_flag=0;
+uint8_t led_mode=0;
 
 /**************************
 
@@ -169,14 +172,27 @@ Interrupts configuration
 
 ****************************/
 
+#define RAND_LED PC4
 
 ISR(INT0_vect)
 {
-	//code
+	if(random_flag==0)
+	{
+		if(led_mode>=9)
+		{
+			led_mode=0;
+		}
+		else
+		{
+			led_mode++;
+		}
+		non_random_operation(led_mode);
+	}
 }
 
 ISR(INT1_vect)
 {
+	
 	//code
 }
 
@@ -189,6 +205,23 @@ void init_interrupt()
 void disable_interrupt()
 {
 	cli();
+}
+
+void non_random_operation(uint8_t x)
+{
+	switch(x)
+	{
+		case 0 : mode_00(); break;
+		case 1 : mode_00(); break;
+		//...
+		default : mode_00();
+	}
+}
+
+void random_operation()
+{
+	
+	//to be continued
 }
 
 
@@ -227,8 +260,9 @@ void mode_00()
 }
 
 int main()
-{
+{	
 	init_74HC595();
-	mode_00();
+	init_interrupt();
+	non_random_operation(led_mode);
 	return 0;
 }
