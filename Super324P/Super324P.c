@@ -9,6 +9,7 @@
 #define F_CPU 20000000
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 
 #define setHigh(port,pin) port|=(1<<pin)
@@ -162,6 +163,31 @@ REG_DATA cube2reg_data(CUBE x)
 	return y;
 }
 
+/***************************
+
+Interrupts configuration
+
+****************************/
+
+
+ISR(INT0_vect)
+{
+	//code
+}
+
+ISR(INT1_vect)
+{
+	//code
+}
+
+void init_interrupt()
+{
+	//configure registers
+sei();
+}
+
+
+
 /*************************
 
 Cube modes
@@ -169,11 +195,6 @@ Cube modes
 CUBE data type: {line,line,line,line,line,line,line,level}
 
 *******************************/
-
-void interr_tr()
-{
-	
-}
 
 
 void mode_00()
